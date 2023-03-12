@@ -108,14 +108,14 @@ def optimal_agent_after_occupancy(data, raw):
     return agent_after_shrinkage(data["shrinkage"], raw)
 
 
-def fin_maximum_calls(ag, aht, target, servicel):
-    i = ag - 1
-    pw = erlang_c(i, ag)
-    s = get_service_level(pw, ag, i, target, aht)
-    while s < servicel:
+def find_maximum_calls(data):
+    i = data["agents_num"] - 1
+    pw = erlang_c(i, data["agents_num"])
+    s = get_service_level(pw, data["agents_num"], i, data["max_waiting_time"], data["aht"])
+    while s < data["service_level"]:
         i = i - 1
-        pw = erlang_c(i, ag)
-        s = get_service_level(pw, ag, i, target, aht)
+        pw = erlang_c(i, data["agents_num"])
+        s = get_service_level(pw, data["agents_num"], i, data["max_waiting_time"], data["aht"])
     return (
-        i * 3600 / aht
+        i * 3600 / data["aht"]
     )  # i is the number of possible Erlangs so *3600/aht gives the number of calls

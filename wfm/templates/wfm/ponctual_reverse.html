@@ -5,14 +5,14 @@
   </div>
 
   <div class="ponctual_reverse_form">
-    <form class="pnctual_reverse" action="index.html" method="post">
+    <form class="ponctual_reverse" action="{% url 'process_ponctual_reverse' %}" method="post">
       {% csrf_token %}
 
       <div class="for_margin"><label for="number">Number of working agents:</label></div>
       <input class="left_margin" type="number" id="agents_num" name="agents_num" value="8"><br><br>
 
       <div class="for_margin"><label for="number">Average Handling Time:</label></div>
-      <input class="left_margin" type="number" id="aht_num" name="aht_num" value="1">
+      <input class="left_margin" type="number" id="aht_num" name="aht" value="1">
 
       <select class="period_type" id="periodTypeDropdown" name="aht_unit">
         <option value="seconds">Seconds</option>
@@ -20,8 +20,8 @@
       </select> <br><br>
 
       <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
-      <input class="left_margin" type="number" id="waiting_time" name="waiting_time" value="10">
-      
+      <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10">
+
       <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
         <option value="seconds">Seconds</option>
         <option value="minutes" selected>Minutes</option>
