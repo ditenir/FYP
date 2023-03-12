@@ -1,0 +1,54 @@
+.dropdown-content{
+  display: none;
+}
+
+#option1Content{
+  display: block;
+}
+
+#myDropdown:focus + .dropdown-content{
+  display: block;
+}
+
+#ponctualReverse{
+  display: none;
+}
+
+.calculator{
+  border: 10px solid powderblue;
+  border-radius: 15px;
+  margin: 0px 150px 50px 150px;
+  padding: 20px;
+}
+
+.btn-secondary{
+  color: #ffffff;
+}
+
+.ponctual_form{
+  margin: 20px 8px 10px 10px;
+}
+
+.for_margin{
+  width: 300px;
+}
+
+.left_margin{
+  margin-left: 0px;
+}
+
+#periodTypeDropdown{
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+#periodTypeDropdown option {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f2f2f2;
+  color: #333;
+}
