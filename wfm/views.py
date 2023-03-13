@@ -1,9 +1,35 @@
-from django.shortcuts import render
+from django.contrib.auth import authenticate
+from django.shortcuts import render, redirect
+from .models import *
 from .helpers import *
 
 
+def auth(request):
+    return render(request, 'wfm/auth.html')
+
+
+def signup(request):
+    user = User.objects.create_user(
+        request.POST["username"],
+        request.POST["email"],
+        request.POST["password"],
+        first_name=request.POST["name"],
+    )
+    authenticate(request, username=user.username, password=request.POST["password"])
+    return render(request, 'wfm/index.html', {'user': user})
+
+
+def signin(request):
+    user = authenticate(
+        request,
+        username=request.POST["username"],
+        password=request.POST["password"]
+    )
+    return render(request, 'wfm/index.html', {'user': user})
+
+
 def index(request):
-    return render(request, 'wfm/index.html')
+    return render(request, 'wfm/index.html', {'user': request.user})
 
 
 def process_ponctual_forecast(request):
