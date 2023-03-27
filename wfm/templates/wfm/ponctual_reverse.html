@@ -9,10 +9,10 @@
       {% csrf_token %}
 
       <div class="for_margin"><label for="number">Number of working agents:</label></div>
-      <input class="left_margin" type="number" id="agents_num" name="agents_num" value="8"><br><br>
+      <input class="left_margin" type="number" id="agents_num" name="agents_num" value="8" required min="1"><br><br>
 
       <div class="for_margin"><label for="number">Average Handling Time:</label></div>
-      <input class="left_margin" type="number" id="aht_num" name="aht" value="1">
+      <input class="left_margin" type="number" id="aht_num" name="aht" value="1" required min="1">
 
       <select class="period_type" id="periodTypeDropdown" name="aht_unit">
         <option value="seconds">Seconds</option>
@@ -20,7 +20,7 @@
       </select> <br><br>
 
       <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
-      <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10">
+      <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10" required min="1">
 
       <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
         <option value="seconds">Seconds</option>
@@ -28,11 +28,11 @@
       </select> <br><br>
 
       <div class="for_margin"><label for="service_level">Desired service level:</label></div>
-      <input class="left_margin" type="number" id="service_level" name="service_level" value="100">
+      <input class="left_margin" type="number" id="service_level" name="service_level" value="100" required min="1">
       <label for="service_level">in percentage</label><br><br>
 
       <div class="for_margin"><label for="occupancy">Desired maximum occupancy:</label></div>
-      <input class="left_margin" type="number" id="occupancy" name="occupancy" value="80" placeholder="Leave 100 for raw">
+      <input class="left_margin" type="number" id="occupancy" name="occupancy" value="80" placeholder="Leave 100 for raw" required min="1">
       <label for="occupancy">in percentage</label><br><br>
 
       <button type="submit" class="btn btn-primary">Submit</button>

@@ -86,7 +86,7 @@ def find_optimal_raw_agent(
     calls, period, unit, working_hours, aht, target, service_level
 ):
     """returns optimal number of agents for calls in period,workh
-    is working hours in aday aht is average handling time,
+    is working hours in a day aht is average handling time,
     target is maximum waiting time, servicel is servicelevel percentage"""
     a = call_intensity(calls_per_hour(calls, period, working_hours, unit), aht)
     i = int(a) + 1
