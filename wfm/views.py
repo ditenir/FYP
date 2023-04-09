@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
 from django.shortcuts import render, redirect
@@ -30,7 +30,11 @@ def signin(request):
         username=request.POST["username"],
         password=request.POST["password"]
     )
-    return render(request, 'wfm/index.html', {'user': user})
+    if user is not None:
+        login(request, user)
+    else:
+        return render(request, 'wfm/auth.html')
+    return redirect('index')
 
 
 @login_required
@@ -70,7 +74,16 @@ def process_ponctual_forecast(request):
         data["aht_unit"] = data["aht_unit"][0]
 
     context = calculate_ponctual_forecast(data)
-    return render(request, "wfm/ponctual_forecast_output.html", context)
+    calculation = PonctualForecast.objects.create(
+        user=request.user,
+        required_agents_number=context["raw_agent_number"],
+        agents_number_after_shrinkage=context["optimal_agents_number"],
+        agents_number_max_occupancy=context["raw_optimal_agents_number"],
+        service_level=context["service_level"],
+        calls_without_delay=context["immediately_answered_calls"],
+        average_speed=context["average_speed_answered_calls"]
+    )
+    return redirect('get_calculation', id=calculation.id)
 
 
 @login_required
@@ -98,6 +111,28 @@ def download_template(request):
     )
     response["Content-Disposition"] = "inline; filename=ponctual_forecast.xlsx"
     return response
+
+
+def get_calculation(request, id):
+    calculation = Calculation.objects.get(pk=id)
+    if hasattr(calculation, "ponctualforecast"):
+        return render(request, "wfm/ponctual_forecast_output.html", {
+            "ponctual_forecast": calculation.ponctualforecast
+        })
+
+
+def export_calculation(request, id):
+    calculation = Calculation.objects.get(pk=id)
+    if hasattr(calculation, "ponctualforecast"):
+        export = open(generate_excel(calculation.ponctualforecast), "rb")
+        response = FileResponse(
+            export,
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = "inline; filename=export.xlsx"
+        return response
+
+
 
 
 

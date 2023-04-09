@@ -2,11 +2,13 @@
 {% block content %}
 <div class="output">
   <br>
-  <p> You will need {{ raw_agent_number }} agents</p> <br>
-  <p> The number of agents after shrinkage is {{ optimal_agents_number }}</p> <br>
-  <p> Number of agents needed considering maximum occupancy is {{ raw_optimal_agents_number }}</p> <br>
-  <p> Service level is {{ service_level }} %</p>  <br>
-  <p> Percentage of calls answered without delays is {{ immediately_answered_calls }} % </p> <br>
-  <p> Average speed of answering calls is {{ average_speed_answered_calls }} seconds </p> <br>
+  <p> You will need {{ ponctual_forecast.required_agents_number }} agents</p> <br>
+  <p> The number of agents after shrinkage is {{ ponctual_forecast.agents_number_after_shrinkage }}</p> <br>
+  <p> Number of agents needed considering maximum occupancy is {{ ponctual_forecast.agents_number_max_occupancy }}</p> <br>
+  <p> Service level is {{ ponctual_forecast.service_level }} %</p>  <br>
+  <p> Percentage of calls answered without delays is {{ ponctual_forecast.calls_without_delay }} % </p> <br>
+  <p> Average speed of answering calls is {{ ponctual_forecast.average_speed }} seconds </p> <br>
 </div>
+<button class="btn btn-primary" onclick="window.location='/calculations/{{ ponctual_forecast.id }}/export';">Export in Excel</button> <br><br>
+
 {% endblock %}

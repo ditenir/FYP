@@ -1,4 +1,8 @@
+from django.conf import settings
+
 from .common import *
+from openpyxl import load_workbook
+import os
 
 
 def calculate_ponctual_forecast(data):
@@ -38,3 +42,20 @@ def calculate_ponctual_forecast(data):
         "immediately_answered_calls": immediately_answered_calls,
         "average_speed_answered_calls": average_speed_answered_calls,
     }
+
+def generate_excel(calculation):
+    workbook = load_workbook(os.path.join(settings.EXCEL_TEMPLATES_DIRECTORY, "output/ponctual_forecast.xlsx"))
+    worksheet = workbook.active
+    worksheet['A2'] = calculation.required_agents_number
+    worksheet['B2'] = calculation.agents_number_after_shrinkage
+    worksheet['C2'] = calculation.agents_number_max_occupancy
+    worksheet['D2'] = calculation.service_level
+    worksheet['E2'] = calculation.calls_without_delay
+    worksheet['F2'] = calculation.average_speed
+    worksheet.views.sheetView[0].selection[0].activeCell = "A1"
+    path = "/tmp/ponctual_forecast.xlsx"
+    workbook.save(path)
+    return path
+
+
+

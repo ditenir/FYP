@@ -1,8 +1,21 @@
 <div class="ponctual">
       <div class="forecast_name">
           <h3>Ponctual Forecast</h3><br>
-          <h6>Calculate the number of staff required to reach an agreed service level</h6><br>
+          <h5>Calculate the number of staff required to reach an agreed service level</h5><br>
+          <h6>Download the input file, fill in with parameters and upload the file again</h6>
       </div>
+
+    <button class="btn btn-primary" onclick="window.location='/download_template?type=ponctual_forecast';">Download input file template</button> <br><br>
+
+    <form class="process_input_file" action="{% url 'process_ponctual_forecast' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="input_file" required>
+      <button type="submit" class="btn btn-primary">Calculate</button>
+    </form> <br><br>
+
+
+
+          <h6>Or enter the parameters directly in the calculator</h6>
 
       <div class="ponctual_form">
           <form class="ponctual_form" action="{% url 'process_ponctual_forecast' %}" method="post">
@@ -56,15 +69,6 @@
             <label for="shrinkage">in percentage</label><br><br>
 
             <button type="submit" class="btn btn-primary">Calculate</button>
-
-          </form>
-          <button class="btn btn-primary" onclick="window.location='/download_template?type=ponctual_forecast';">Download input file template</button>
-
-          <form class="process_input_file" action="{% url 'process_ponctual_forecast' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="input_file">
-            <button type="submit" class="btn btn-primary"></button>
-          </form>
-
+        </form>
       </div>
 </div>

@@ -129,3 +129,5 @@ AUTH_USER_MODEL = 'wfm.User'
 LOGIN_URL = "auth"
 
 EXCEL_TEMPLATES_DIRECTORY = os.path.join(BASE_DIR, 'excel')
+
+
