@@ -2,7 +2,17 @@
   <div class="forecast_name">
       <h3>Ponctual Reverse Forecast</h3><br>
       <h6>Calculate the number of calls with the current service level</h6><br>
+      <h6>Download the input file, fill in with parameters and upload the file again</h6> <br>
   </div>
+
+  <button class="btn btn-primary" onclick="window.location='/download_template?type=punctual_reverse_forecast';">Download input file template</button> <br><br>
+
+  <form class="process_input_file" action="{% url 'process_ponctual_reverse' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="input_file" required>
+    <button type="submit" class="btn btn-primary">Calculate</button>
+  </form> <br><br>
+
 
   <div class="ponctual_reverse_form">
     <form class="ponctual_reverse" action="{% url 'process_ponctual_reverse' %}" method="post">

@@ -45,7 +45,7 @@ def avoid_big_fact(a, n):
 
 def erlang_c(a, n):
     """returns Erlang probability of a call waiting
-    A is trafic intensity and N is number of available channels or agents"""
+    A is traffic intensity and N is number of available channels or agents"""
     l = avoid_big_fact(a, n) * (n / (n - a))
     sum_ = 0
     for i in range(n):
@@ -87,7 +87,7 @@ def find_optimal_raw_agent(
 ):
     """returns optimal number of agents for calls in period,workh
     is working hours in a day aht is average handling time,
-    target is maximum waiting time, servicel is servicelevel percentage"""
+    target is maximum waiting time, servicel is service level percentage"""
     a = call_intensity(calls_per_hour(calls, period, working_hours, unit), aht)
     i = int(a) + 1
     pw = erlang_c(a, i)
@@ -308,7 +308,7 @@ sg.theme("SystemDefaultForReal")
 
 today = datetime.now()
 
-fixed = datetime.strptime("2023-2-28 9:00:00", "%Y-%m-%d %H:%M:%S")
+fixed = datetime.strptime("2023-4-27 9:00:00", "%Y-%m-%d %H:%M:%S")
 
 delta = today - fixed
 

@@ -20,3 +20,9 @@ class PonctualForecast(Calculation):
     average_speed = models.IntegerField()
 
 
+class PunctualReverseForecast(Calculation):
+    max_calls_number = models.IntegerField()
+    max_occupancy = models.IntegerField()
+    max_calls_with_occupancy = models.IntegerField()
+    average_occupancy = models.IntegerField()
+    service_level = models.IntegerField()

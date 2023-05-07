@@ -1,3 +1,8 @@
+import os
+
+from django.conf import settings
+from openpyxl.reader.excel import load_workbook
+
 from .common import *
 
 
@@ -30,3 +35,17 @@ def calculate_ponctual_reverse(data):
         "occupancy_level": occupancy_level,
         "service_level": service_level,
     }
+
+
+def generate_excel(calculation):
+    workbook = load_workbook(os.path.join(settings.EXCEL_TEMPLATES_DIRECTORY, "output/punctual_reverse.xlsx"))
+    worksheet = workbook.active
+    worksheet['A2'] = calculation.max_calls_number
+    worksheet['B2'] = calculation.max_occupancy
+    worksheet['C2'] = calculation.max_calls_with_occupancy
+    worksheet['D2'] = calculation.average_occupancy
+    worksheet['E2'] = calculation.service_level
+    worksheet.views.sheetView[0].selection[0].activeCell = "A1"
+    path = "/tmp/punctual_reverse.xlsx"
+    workbook.save(path)
+    return path

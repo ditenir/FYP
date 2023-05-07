@@ -88,19 +88,37 @@ def process_ponctual_forecast(request):
 
 @login_required
 def process_ponctual_reverse(request):
-    data = dict(request.POST)
-    print(data)
-    data["agents_num"] = int(data["agents_num"][0])
-    data["aht"] = int(data["aht"][0])
-    data["aht_unit"] = data["aht_unit"][0]
-    data["max_waiting_time"] = int(data["max_waiting_time"][0])
-    data["max_waiting_time_unit"] = data["max_waiting_time_unit"][0]
-    data["service_level"] = int(data["service_level"][0])
-    data["occupancy"] = int(data["occupancy"][0])
+    if request.FILES:
+        dataframe = pd.read_excel(request.FILES['input_file'])
+        data = {
+            "agents_num": dataframe["Number of working agents"][0],
+            "aht": dataframe["Average Handling Time"][0],
+            "aht_unit": dataframe["Average Handling Time Unit"][0],
+            "max_waiting_time": dataframe["Target maximum waiting time"][0],
+            "max_waiting_time_unit": dataframe["Target maximum waiting time unit"][0],
+            "service_level": dataframe["Desired maximum occupancy"][0],
+            "occupancy": dataframe["Desired maximum occupancy"][0]
+        }
+    else:
+        data = dict(request.POST)
+        data["agents_num"] = int(data["agents_num"][0])
+        data["aht"] = int(data["aht"][0])
+        data["aht_unit"] = data["aht_unit"][0]
+        data["max_waiting_time"] = int(data["max_waiting_time"][0])
+        data["max_waiting_time_unit"] = data["max_waiting_time_unit"][0]
+        data["service_level"] = int(data["service_level"][0])
+        data["occupancy"] = int(data["occupancy"][0])
 
     context = calculate_ponctual_reverse(data)
-    return render(request, "wfm/ponctual_reverse_output.html", context)
-
+    calculation = PunctualReverseForecast.objects.create(
+        user=request.user,
+        max_calls_number=context["max_calls_per_hour"],
+        max_occupancy=context["max_occupancy"],
+        max_calls_with_occupancy=context["max_calls"],
+        average_occupancy=context["occupancy_level"],
+        service_level=context["service_level"]
+    )
+    return redirect('get_calculation', id=calculation.id)
 
 def download_template(request):
     template = os.path.join(settings.EXCEL_TEMPLATES_DIRECTORY, f'input/{ request.GET.get("type")}.xlsx')
@@ -109,7 +127,7 @@ def download_template(request):
         file,
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
-    response["Content-Disposition"] = "inline; filename=ponctual_forecast.xlsx"
+    response["Content-Disposition"] = f"inline; filename={ request.GET.get('type') }.xlsx"
     return response
 
 
@@ -119,18 +137,32 @@ def get_calculation(request, id):
         return render(request, "wfm/ponctual_forecast_output.html", {
             "ponctual_forecast": calculation.ponctualforecast
         })
+    elif hasattr(calculation, "punctualreverseforecast"):
+        return render(request, "wfm/ponctual_reverse_output.html", {
+            "punctual_reverse": calculation.punctualreverseforecast
+        })
 
 
 def export_calculation(request, id):
     calculation = Calculation.objects.get(pk=id)
     if hasattr(calculation, "ponctualforecast"):
-        export = open(generate_excel(calculation.ponctualforecast), "rb")
+        export = open(ponctual_forecast_excel(calculation.ponctualforecast), "rb")
         response = FileResponse(
             export,
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
         response["Content-Disposition"] = "inline; filename=export.xlsx"
         return response
+
+    elif hasattr(calculation, "punctualreverseforecast"):
+        export = open(ponctual_reverse_excel(calculation.punctualreverseforecast), "rb")
+        response = FileResponse(
+            export,
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = "inline; filename=export.xlsx"
+        return response
+
 
 
 

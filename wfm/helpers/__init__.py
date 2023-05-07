@@ -1,3 +1,3 @@
-from .ponctual_forecast import calculate_ponctual_forecast, generate_excel
-from .ponctual_reverse import calculate_ponctual_reverse
+from .ponctual_forecast import calculate_ponctual_forecast, generate_excel as ponctual_forecast_excel
+from .ponctual_reverse import calculate_ponctual_reverse, generate_excel as ponctual_reverse_excel
 
