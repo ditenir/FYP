@@ -5,7 +5,7 @@ from openpyxl import load_workbook
 import os
 
 
-def calculate_ponctual_forecast(data):
+def calculate(data):
     if data["aht_unit"] == "minutes":
         data["aht"] *= 60
     if data["max_waiting_time_unit"] == "minutes":

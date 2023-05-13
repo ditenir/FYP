@@ -1,0 +1,46 @@
+<div class="multiple_period">
+
+
+  <div class="forecast_name">
+      <br>
+      <h3>Multiple Period Forecast</h3><br>
+      <h5>Calculate the number of staff required to reach an agreed service level for multiple periods</h5><br>
+      <h6>Download the input file, fill in with parameters and upload the file again</h6>
+  </div>
+
+
+  <button class="btn btn-primary" onclick="window.location='/download_template?type=multiple_period';">Download input file template</button> <br><br>
+
+  <form class="process_input_file" action="{% url 'process_multiple_period' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="input_file" required><br>
+    <br>
+    <div class="for_margin"><label for="number">Expected number of calls:</label></div>
+    <input class="left_margin" type="number" id="calls_num" name="calls_num" value="1000" required min="1"><br><br>
+
+    <div class="for_margin"><label for="service_level">Desired service level:</label></div>
+    <input class="left_margin" type="number" id="service_level" name="service_level" value="100" required min="1">
+    <label for="service_level">in percentage</label><br><br>
+
+    <div class="for_margin"><label for="aht">Average handling time:</label></div>
+    <input class="left_margin" type="number" id="aht" name="aht" value="1" required min="1">
+
+    <select class="period_type" id="periodTypeDropdown" name="aht_unit">
+      <option value="seconds">Seconds</option>
+      <option value="minutes" selected>Minutes</option>
+    </select> <br><br>
+
+    <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
+    <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10" required min="1">
+
+    <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
+      <option value="seconds">Seconds</option>
+      <option value="minutes" selected>Minutes</option>
+    </select> <br><br>
+
+
+    <button type="submit" class="btn btn-primary">Calculate</button>
+  </form> <br><br>
+
+
+</div>

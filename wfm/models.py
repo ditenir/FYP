@@ -26,3 +26,15 @@ class PunctualReverseForecast(Calculation):
     max_calls_with_occupancy = models.IntegerField()
     average_occupancy = models.IntegerField()
     service_level = models.IntegerField()
+
+
+class MultiplePeriodForecast(Calculation):
+    total_agents_number = models.IntegerField()
+    agents_per_criteria = models.ManyToManyField("MultiplePeriodTable")
+
+
+class MultiplePeriodTable(models.Model):
+    zone = models.CharField(max_length=63, null=True)
+    language = models.CharField(max_length=15, null=True)
+    media_type = models.CharField(max_length=15, null=True)
+    agents_table = models.JSONField()

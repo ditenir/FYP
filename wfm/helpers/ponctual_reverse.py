@@ -6,7 +6,7 @@ from openpyxl.reader.excel import load_workbook
 from .common import *
 
 
-def calculate_ponctual_reverse(data):
+def calculate(data):
     if data["aht_unit"] == "minutes":
         data["aht"] *= 60
     if data["max_waiting_time_unit"] == "minutes":
