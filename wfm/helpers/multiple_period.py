@@ -1,3 +1,9 @@
+import os
+
+from django.conf import settings
+from openpyxl.reader.excel import load_workbook
+from openpyxl.styles import PatternFill
+
 from .common import *
 from .ponctual_forecast import calculate as calculate_ponctual_forecast
 import pandas
@@ -42,6 +48,30 @@ def calculate(dataframe, input_data):
     return result
 
 
+def generate_excel(calculation):
+    workbook = load_workbook(os.path.join(settings.EXCEL_TEMPLATES_DIRECTORY, "output/multiple_period.xlsx"))
+    worksheet = workbook.active
+    worksheet['B1'] = calculation.total_agents_number
+    row = 5
+    for table in calculation.agents_per_criteria.all():
+        fill_export_with_table(row, table, worksheet)
+        row += 5 + len(table.agents_table[list(table.agents_table.keys())[0]])
+    worksheet.views.sheetView[0].selection[0].activeCell = "A1"
+    path = "/tmp/multiple_period.xlsx"
+    workbook.save(path)
+    return path
 
 
-
+def fill_export_with_table(row, table, worksheet):
+    worksheet[f'B{row}'] = table.language
+    worksheet[f'B{row}'].fill = PatternFill(
+        patternType=""
+    )
+    worksheet[f'C{row}'] = table.zone
+    worksheet[f'D{row}'] = table.media_type
+    for column, weekday in enumerate(WEEKDAYS):
+        worksheet[f'{chr(ord("C") + column)}{row + 2}'] = weekday
+    for index, hour in enumerate(sorted(table.agents_table.keys())):
+        worksheet[f'B{row + index + 3}'] = hour
+        for counter, value in enumerate(table.agents_table[hour]):
+            worksheet[f'{chr(ord("C") + counter)}{row + index + 3}'] = value

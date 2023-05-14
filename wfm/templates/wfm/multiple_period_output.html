@@ -8,13 +8,13 @@
     <table>
       <tr>
         <th></th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-        <th>Sunday</th>
+        <th>  Monday  </th>
+        <th>  Tuesday  </th>
+        <th>  Wednesday  </th>
+        <th>  Thursday  </th>
+        <th>  Friday  </th>
+        <th>  Saturday  </th>
+        <th>  Sunday  </th>
       </tr>
 
       {% for hour, data in i.agents_table.items %}
@@ -32,5 +32,5 @@
   {% endfor %}
 </div>
 
-<button class="btn btn-primary" onclick="window.location='/calculations/{{ punctual_reverse.id }}/export';">Export in Excel</button> <br><br>
+<button class="btn btn-primary" onclick="window.location='/calculations/{{ id }}/export';">Export in Excel</button> <br><br>
 {% endblock %}

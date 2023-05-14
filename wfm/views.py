@@ -1,8 +1,9 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.core.exceptions import *
 import os
 import pandas as pd
 from .models import *
@@ -20,8 +21,8 @@ def signup(request):
         request.POST["password"],
         first_name=request.POST["name"],
     )
-    authenticate(request, username=user.username, password=request.POST["password"])
-    return render(request, 'wfm/index.html', {'user': user})
+    login(request, user)
+    return redirect('index')
 
 
 def signin(request):
@@ -37,9 +38,26 @@ def signin(request):
     return redirect('index')
 
 
+def sign_out(request):
+    logout(request)
+    return redirect('auth')
+
+
+def reset_password(request):
+    try:
+        user = User.objects.get(email=request.POST['email'])
+    except ObjectDoesNotExist:
+        return redirect('auth')
+
+
+
 @login_required
 def index(request):
     return render(request, 'wfm/index.html', {'user': request.user})
+
+
+def punctual_forecast(request):
+    return render(request, 'wfm/ponctual_forecast.html', {'user': request.user})
 
 
 @login_required
@@ -83,7 +101,13 @@ def process_ponctual_forecast(request):
         calls_without_delay=result["immediately_answered_calls"],
         average_speed=result["average_speed_answered_calls"]
     )
+    calculation.type = "punctual_forecast"
+    calculation.save()
     return redirect('get_calculation', id=calculation.id)
+
+
+def punctual_reverse(request):
+    return render(request, 'wfm/ponctual_reverse.html', {'user': request.user})
 
 
 @login_required
@@ -118,9 +142,16 @@ def process_ponctual_reverse(request):
         average_occupancy=result["occupancy_level"],
         service_level=result["service_level"]
     )
+    calculation.type = "punctual_reverse"
+    calculation.save()
     return redirect('get_calculation', id=calculation.id)
 
 
+def multiple_period(request):
+    return render(request, 'wfm/multiple_period.html', {'user': request.user})
+
+
+@login_required
 def process_multiple_period(request):
     dataframe = pd.read_excel(request.FILES['input_file'])
     data = dict(request.POST)
@@ -147,10 +178,13 @@ def process_multiple_period(request):
         user=request.user,
         total_agents_number=sum(agents) / (len(agents) * 7)
     )
+    calculation.type = "multiple_period"
+    calculation.save()
     calculation.agents_per_criteria.set(tables)
     return redirect('get_calculation', id=calculation.id)
 
 
+@login_required
 def download_template(request):
     template = os.path.join(settings.EXCEL_TEMPLATES_DIRECTORY, f'input/{ request.GET.get("type")}.xlsx')
     file = open(template, 'rb')
@@ -162,17 +196,20 @@ def download_template(request):
     return response
 
 
+@login_required
 def get_calculation(request, id):
+    if id not in request.user.calculation_set.all().values_list('id', flat=True):
+        return redirect('index')
     calculation = Calculation.objects.get(pk=id)
-    if hasattr(calculation, "ponctualforecast"):
+    if calculation.type == "punctual_forecast":
         return render(request, "wfm/ponctual_forecast_output.html", {
             "ponctual_forecast": calculation.ponctualforecast
         })
-    elif hasattr(calculation, "punctualreverseforecast"):
+    elif calculation.type == "punctual_reverse":
         return render(request, "wfm/ponctual_reverse_output.html", {
             "punctual_reverse": calculation.punctualreverseforecast
         })
-    elif hasattr(calculation, "multipleperiodforecast"):
+    elif calculation.type == "multiple_period":
         tables = []
         for i in calculation.multipleperiodforecast.agents_per_criteria.all():
             tables.append({
@@ -183,33 +220,53 @@ def get_calculation(request, id):
             })
         return render(request, "wfm/multiple_period_output.html", {
             "agents_number": calculation.multipleperiodforecast.total_agents_number,
-            "tables": tables
+            "tables": tables,
+            "id": calculation.id
         })
 
 
+@login_required
 def export_calculation(request, id):
+    if id not in request.user.calculation_set.all().values_list('id', flat=True):
+        return redirect('index')
     calculation = Calculation.objects.get(pk=id)
-    if hasattr(calculation, "ponctualforecast"):
+    if calculation.type == "punctual_forecast":
         export = open(ponctual_forecast_excel(calculation.ponctualforecast), "rb")
         response = FileResponse(
             export,
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
-        response["Content-Disposition"] = "inline; filename=export.xlsx"
+        response["Content-Disposition"] = f"inline; filename=punctual_forecast_export_{id}.xlsx"
         return response
 
-    elif hasattr(calculation, "punctualreverseforecast"):
+    elif calculation.type == "punctual_reverse":
         export = open(ponctual_reverse_excel(calculation.punctualreverseforecast), "rb")
         response = FileResponse(
             export,
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         )
-        response["Content-Disposition"] = "inline; filename=export.xlsx"
+        response["Content-Disposition"] = f"inline; filename=punctual_reverse_export_{id}.xlsx"
+        return response
+
+    elif calculation.type == "multiple_period":
+        export = open(multiple_period_excel(calculation.multipleperiodforecast), "rb")
+        response = FileResponse(
+            export,
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = f"inline; filename=multiple_period_export_{id}.xlsx"
         return response
 
 
+@login_required
+def delete_calculation(request, id):
+    if id not in request.user.calculation_set.all().values_list('id', flat=True):
+        return redirect('index')
+    calculation = Calculation.objects.get(pk=id)
+    calculation.delete()
+    return redirect('history')
 
 
-
-
-
+@login_required
+def history(request):
+    return render(request, "wfm/history.html", {"calculations": request.user.calculation_set.all().order_by("-id")})

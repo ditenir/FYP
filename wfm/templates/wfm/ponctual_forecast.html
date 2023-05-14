@@ -1,74 +1,77 @@
-<div class="ponctual">
-      <div class="forecast_name">
-          <h3>Ponctual Forecast</h3><br>
-          <h5>Calculate the number of staff required to reach an agreed service level</h5><br>
-          <h6>Download the input file, fill in with parameters and upload the file again</h6>
-      </div>
+{% extends 'wfm/base.html' %}
+{% block content %}
+  <div class="ponctual">
+        <div class="forecast_name">
+            <h3>Ponctual Forecast</h3><br>
+            <h5>Calculate the number of staff required to reach an agreed service level</h5><br>
+            <h6>Download the input file, fill in with parameters and upload the file again</h6>
+        </div>
 
-    <button class="btn btn-primary" onclick="window.location='/download_template?type=ponctual_forecast';">Download input file template</button> <br><br>
+      <button class="btn btn-primary" onclick="window.location='/download_template?type=ponctual_forecast';">Download input file template</button> <br><br>
 
-    <form class="process_input_file" action="{% url 'process_ponctual_forecast' %}" method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <input type="file" name="input_file" required>
-      <button type="submit" class="btn btn-primary">Calculate</button>
-    </form> <br><br>
+      <form class="process_input_file" action="{% url 'process_ponctual_forecast' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="input_file" required>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+      </form> <br><br>
 
 
 
-          <h6>Or enter the parameters directly in the calculator</h6>
+            <h6>Or enter the parameters directly in the calculator</h6>
 
-      <div class="ponctual_form">
-          <form class="ponctual_form" action="{% url 'process_ponctual_forecast' %}" method="post">
-            {% csrf_token %}
+        <div class="ponctual_form">
+            <form class="ponctual_form" action="{% url 'process_ponctual_forecast' %}" method="post">
+              {% csrf_token %}
 
-            <div class="for_margin"><label for="number">Number of calls:</label></div>
-            <input class="left_margin" type="number" id="calls_num" name="calls_num" value="300" required min="1"><br><br>
+              <div class="for_margin"><label for="number">Number of calls:</label></div>
+              <input class="left_margin" type="number" id="calls_num" name="calls_num" value="300" required min="1"><br><br>
 
-            <div class="for_margin"><label for="period_num">In a period of:</label></div>
-            <input class="left_margin" type="number" id="period_num" name="period_num" value="2" required min="1">
+              <div class="for_margin"><label for="period_num">In a period of:</label></div>
+              <input class="left_margin" type="number" id="period_num" name="period_num" value="2" required min="1">
 
-            <select class="period_type" id="periodTypeDropdown" name="period_type">
-              <option value="minute">Minute</option>
-              <option value="hour" selected>Hour</option>
-              <option value="day">Day</option>
-              <option value="month">Month</option>
-              <option value="year">Year</option>
-            </select>
+              <select class="period_type" id="periodTypeDropdown" name="period_type">
+                <option value="minute">Minute</option>
+                <option value="hour" selected>Hour</option>
+                <option value="day">Day</option>
+                <option value="month">Month</option>
+                <option value="year">Year</option>
+              </select>
 
-            <br><br>
+              <br><br>
 
-            <div class="for_margin"><label for="working_hours_num">Number of working hours a day:</label></div>
-            <input class="left_margin" type="number" id="period_num" name="working_hours_num" value="8" required min="1"><br><br>
+              <div class="for_margin"><label for="working_hours_num">Number of working hours a day:</label></div>
+              <input class="left_margin" type="number" id="period_num" name="working_hours_num" value="8" required min="1"><br><br>
 
-            <div class="for_margin"><label for="aht">Average handling time:</label></div>
-            <input class="left_margin" type="number" id="aht" name="aht" value="1" required min="1">
+              <div class="for_margin"><label for="aht">Average handling time:</label></div>
+              <input class="left_margin" type="number" id="aht" name="aht" value="1" required min="1">
 
-            <select class="period_type" id="periodTypeDropdown" name="aht_unit">
-              <option value="seconds">Seconds</option>
-              <option value="minutes" selected>Minutes</option>
-            </select> <br><br>
+              <select class="period_type" id="periodTypeDropdown" name="aht_unit">
+                <option value="seconds">Seconds</option>
+                <option value="minutes" selected>Minutes</option>
+              </select> <br><br>
 
-            <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
-            <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10" required min="1">
+              <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
+              <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10" required min="1">
 
-            <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
-              <option value="seconds">Seconds</option>
-              <option value="minutes" selected>Minutes</option>
-            </select> <br><br>
+              <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
+                <option value="seconds">Seconds</option>
+                <option value="minutes" selected>Minutes</option>
+              </select> <br><br>
 
-            <div class="for_margin"><label for="service_level">Desired service level:</label></div>
-            <input class="left_margin" type="number" id="service_level" name="service_level" value="100" required min="1">
-            <label for="service_level">in percentage</label><br><br>
+              <div class="for_margin"><label for="service_level">Desired service level:</label></div>
+              <input class="left_margin" type="number" id="service_level" name="service_level" value="100" required min="1">
+              <label for="service_level">in percentage</label><br><br>
 
-            <div class="for_margin"><label for="shrinkage">Shrinkage:</label></div>
-            <input class="left_margin" type="number" id="shrinkage" name="shrinkage" value="15" required min="1">
-            <label for="shrinkage">in percentage</label><br><br>
+              <div class="for_margin"><label for="shrinkage">Shrinkage:</label></div>
+              <input class="left_margin" type="number" id="shrinkage" name="shrinkage" value="15" required min="1">
+              <label for="shrinkage">in percentage</label><br><br>
 
-            <div class="for_margin"><label for="max_occupancy">Desired maximum occupancy:</label></div>
-            <input class="left_margin" type="number" id="maxOccupancy" name="max_occupancy" value="80" required min="1">
-            <label for="shrinkage">in percentage</label><br><br>
+              <div class="for_margin"><label for="max_occupancy">Desired maximum occupancy:</label></div>
+              <input class="left_margin" type="number" id="maxOccupancy" name="max_occupancy" value="80" required min="1">
+              <label for="shrinkage">in percentage</label><br><br>
 
-            <button type="submit" class="btn btn-primary">Calculate</button>
-        </form>
-      </div>
-</div>
+              <button type="submit" class="btn btn-primary">Calculate</button>
+          </form>
+        </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'wfm/base.html' %}
+{% block content %}
+
+<div class="output">
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Creation datetime</th>
+            <th>View</th>
+            <th>Export</th>
+            <th>Delete</th>
+        </tr>
+
+        {% for calculation in calculations %}
+        <tr>
+          <td>{{ calculation.id }}</td>
+          <td>
+            {% if calculation.type == "punctual_forecast" %}
+            Punctual forecast
+            {% elif calculation.type == "punctual_reverse" %}
+            Punctual reverse forecast
+            {% elif calculation.type == "multiple_period" %}
+            Multiple period forecast
+            {% endif %}
+          </td>
+          <td>{{ calculation.created_at }}</td>
+          <td><a href="{% url 'get_calculation' calculation.id %}">View</a></td>
+          <td><a href="{% url 'export_calculation' calculation.id %}">Export</a></td>
+          <td><a href="{% url 'delete_calculation' calculation.id %}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+{% endblock %}

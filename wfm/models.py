@@ -8,6 +8,7 @@ class User(AbstractUser):
 
 class Calculation(models.Model):
     created_at = models.DateTimeField(auto_now=True)
+    type = models.CharField(max_length=31, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
