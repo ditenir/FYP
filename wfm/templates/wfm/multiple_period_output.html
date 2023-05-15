@@ -5,23 +5,23 @@
   <p> Total agents number: {{ agents_number }} </p> <br>
   {% for i in tables %}
     <p> Table for {{ i.zone }}, {{ i.language }} and {{ i.media_type }}</p>
-    <table>
+    <table class="table">
       <tr>
         <th></th>
-        <th>  Monday  </th>
-        <th>  Tuesday  </th>
-        <th>  Wednesday  </th>
-        <th>  Thursday  </th>
-        <th>  Friday  </th>
-        <th>  Saturday  </th>
-        <th>  Sunday  </th>
+        <th scope="col">  Monday  </th>
+        <th scope="col">  Tuesday  </th>
+        <th scope="col">  Wednesday  </th>
+        <th scope="col">  Thursday  </th>
+        <th scope="col">  Friday  </th>
+        <th scope="col">  Saturday  </th>
+        <th scope="col">  Sunday  </th>
       </tr>
 
       {% for hour, data in i.agents_table.items %}
         <tr>
-          <td>
+          <th scope="row">
             {{ hour }}
-          </td>
+          </th>
           {% for j in data %}
             <td> {{ j }} </td>
           {% endfor %}

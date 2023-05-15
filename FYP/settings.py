@@ -133,3 +133,11 @@ AUTH_USER_MODEL = 'wfm.User'
 LOGIN_URL = "auth"
 
 EXCEL_TEMPLATES_DIRECTORY = os.path.join(BASE_DIR, 'excel')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_HOST_USER = os.environ.get('MAILGUN_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

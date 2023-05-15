@@ -67,7 +67,7 @@
 }
 
 
-.ponctual {
+.ponctual, .multiple_period {
   margin-left: 50px;
   border: 10px solid powderblue;
   border-radius: 15px;

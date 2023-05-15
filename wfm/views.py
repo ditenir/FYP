@@ -1,5 +1,9 @@
+import datetime
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.db import IntegrityError
 from django.http import FileResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
@@ -11,16 +15,20 @@ from .helpers import *
 
 
 def auth(request):
-    return render(request, 'wfm/auth.html')
+    message = request.GET.get('message', False)
+    return render(request, 'wfm/auth.html', context={"message": message})
 
 
 def signup(request):
-    user = User.objects.create_user(
-        request.POST["username"],
-        request.POST["email"],
-        request.POST["password"],
-        first_name=request.POST["name"],
-    )
+    try:
+        user = User.objects.create_user(
+            request.POST["username"],
+            request.POST["email"],
+            request.POST["password"],
+            first_name=request.POST["name"],
+        )
+    except IntegrityError:
+        return redirect('/auth?message=Username or email is already taken')
     login(request, user)
     return redirect('index')
 
@@ -34,7 +42,7 @@ def signin(request):
     if user is not None:
         login(request, user)
     else:
-        return render(request, 'wfm/auth.html')
+        return redirect('/auth?message=Wrong credentials')
     return redirect('index')
 
 
@@ -43,12 +51,46 @@ def sign_out(request):
     return redirect('auth')
 
 
-def reset_password(request):
+def request_reset_password(request):
     try:
         user = User.objects.get(email=request.POST['email'])
     except ObjectDoesNotExist:
-        return redirect('auth')
+        return redirect('/auth?message=User not found')
+    token = generate_token()
+    user.reset_password_token = token
+    user.reset_password_token_valid_until = datetime.datetime.now() + datetime.timedelta(minutes=10)
+    user.save()
+    base_url = request.build_absolute_uri().split('/')
+    base_url = base_url[0] + '//' + base_url[2]
+    send_mail(
+        'Reset password',
+        f'<a href="{base_url}/reset_password?token={token}">Reset password</a>',
+        settings.EMAIL_HOST_USER,
+        [request.POST['email']],
+        html_message=f'<a href="{base_url}/reset_password?token={token}">Reset password</a>'
+    )
+    return redirect('/auth?message=Reset link was sent to email')
 
+
+def reset_password(request):
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(reset_password_token=request.GET['token'])
+        except ObjectDoesNotExist:
+            return render(request, 'wfm/reset_password.html', context={"success": False, "message": "Token is invalid"})
+        if datetime.datetime.now(user.reset_password_token_valid_until.tzinfo) > user.reset_password_token_valid_until:
+            return render(request, 'wfm/reset_password.html', context={"success": False, "message": "Token expired"})
+        return render(request, 'wfm/reset_password.html', context={"success": True, "token": request.GET['token']})
+    else:
+        user = User.objects.get(reset_password_token=request.POST['token'])
+        if datetime.datetime.now(user.reset_password_token_valid_until.tzinfo) > user.reset_password_token_valid_until:
+            return render(request, 'wfm/reset_password.html', context={"success": False, "message": "Token expired"})
+        user.set_password(request.POST['password'])
+        user.reset_password_token = None
+        user.reset_password_token_valid_until = None
+        user.save()
+        login(request, user)
+        return redirect('index')
 
 
 @login_required
@@ -56,6 +98,7 @@ def index(request):
     return render(request, 'wfm/index.html', {'user': request.user})
 
 
+@login_required
 def punctual_forecast(request):
     return render(request, 'wfm/ponctual_forecast.html', {'user': request.user})
 
@@ -106,6 +149,7 @@ def process_ponctual_forecast(request):
     return redirect('get_calculation', id=calculation.id)
 
 
+@login_required
 def punctual_reverse(request):
     return render(request, 'wfm/ponctual_reverse.html', {'user': request.user})
 
@@ -147,6 +191,7 @@ def process_ponctual_reverse(request):
     return redirect('get_calculation', id=calculation.id)
 
 
+@login_required
 def multiple_period(request):
     return render(request, 'wfm/multiple_period.html', {'user': request.user})
 

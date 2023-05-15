@@ -1,4 +1,6 @@
 from math import exp
+import random
+import string
 
 
 def calls_per_hour(data):
@@ -119,3 +121,8 @@ def find_maximum_calls(data):
     return (
         i * 3600 / data["aht"]
     )  # i is the number of possible Erlangs so *3600/aht gives the number of calls
+
+
+def generate_token():
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choice(characters) for _ in range(63))

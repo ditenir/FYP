@@ -2,19 +2,19 @@
 {% block content %}
 
 <div class="output">
-    <table>
+    <table class="table">
         <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Creation datetime</th>
-            <th>View</th>
-            <th>Export</th>
-            <th>Delete</th>
+            <th scope="col">ID</th>
+            <th scope="col">Type</th>
+            <th scope="col">Creation datetime</th>
+            <th scope="col">View</th>
+            <th scope="col">Export</th>
+            <th scope="col">Delete</th>
         </tr>
 
         {% for calculation in calculations %}
         <tr>
-          <td>{{ calculation.id }}</td>
+          <th scope="row">{{ calculation.id }}</th>
           <td>
             {% if calculation.type == "punctual_forecast" %}
             Punctual forecast

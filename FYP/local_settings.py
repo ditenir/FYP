@@ -132,8 +132,8 @@ EXCEL_TEMPLATES_DIRECTORY = os.path.join(BASE_DIR, 'excel')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_HOST_USER = 'postmaster@sandbox9dab00f32ab74d26b5feb44945eec902.mailgun.org'
-EMAIL_HOST_PASSWORD = '83b2652a23ca98b6cb83cc047c73fbdc-156db0f1-f33cdec6'
+EMAIL_HOST_USER = 'postmaster@sandboxb6c648a94a0e4942a8f3bb79a9f669b2.mailgun.org'
+EMAIL_HOST_PASSWORD = '469b77b2a2c49d08b815848d7185b842-9ad3eb61-d37b22ca'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False

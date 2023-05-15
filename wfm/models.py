@@ -3,7 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    pass
+    reset_password_token = models.CharField(max_length=63, null=True)
+    reset_password_token_valid_until = models.DateTimeField(null=True)
 
 
 class Calculation(models.Model):

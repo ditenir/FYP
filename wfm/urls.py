@@ -10,6 +10,8 @@ urlpatterns = [
     path('signup/', views.signup, name="signup"),
     path('signin/', views.signin, name="signin"),
     path('logout/', views.sign_out, name="logout"),
+    path('request_reset_password', views.request_reset_password, name='request_reset_password'),
+    path('reset_password/', views.reset_password, name='reset_password'),
     path('download_template/', views.download_template),
     path('calculations/<int:id>/', views.get_calculation, name="get_calculation"),
     path('calculations/<int:id>/export/', views.export_calculation, name="export_calculation"),
