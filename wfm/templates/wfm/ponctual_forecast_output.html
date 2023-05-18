@@ -8,7 +8,9 @@
   <p> Service level is {{ ponctual_forecast.service_level }} %</p>  <br>
   <p> Percentage of calls answered without delays is {{ ponctual_forecast.calls_without_delay }} % </p> <br>
   <p> Average speed of answering calls is {{ ponctual_forecast.average_speed }} seconds </p> <br>
+
+  <button class="btn btn-primary" onclick="window.location='/calculations/{{ ponctual_forecast.id }}/export';">Export in Excel</button> <br><br>
 </div>
-<button class="btn btn-primary" onclick="window.location='/calculations/{{ ponctual_forecast.id }}/export';">Export in Excel</button> <br><br>
+
 
 {% endblock %}

@@ -4,7 +4,7 @@
   <br>
   <p> Total agents number: {{ agents_number }} </p> <br>
   {% for i in tables %}
-    <p> Table for {{ i.zone }}, {{ i.language }} and {{ i.media_type }}</p>
+    <p class="fw-medium"> Table for {{ i.zone }}, {{ i.language }} and {{ i.media_type }}</p>
     <table class="table">
       <tr>
         <th></th>
@@ -28,9 +28,8 @@
         </tr>
       {% endfor %}
 
-    </table>
+    </table><br><br><br>
   {% endfor %}
-</div>
-
-<button class="btn btn-primary" onclick="window.location='/calculations/{{ id }}/export';">Export in Excel</button> <br><br>
-{% endblock %}
+  <button class="btn btn-primary" onclick="window.location='/calculations/{{ id }}/export';">Export in Excel</button> <br><br>
+  </div>
+  {% endblock %}

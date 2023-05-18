@@ -1,4 +1,43 @@
 {% extends 'wfm/base.html' %}
 {% block content %}
-<h4 class="greeting">Hello, {{ user.first_name }}!</h4><br>
+  <h4 class="greeting">Hello, {{ user.first_name }}!</h4><br>
+  <div class="articles_content">
+
+    <div class="articles">
+      <div id="punctual-article" class="punctual_article">
+        <h4 class="fs-2">Want to calculate how many agents you need?</h4><br>
+        <h5 class="fs-4"> <a href="{% url 'punctual_forecast' %}">Check Punctual Forecast!</a> </h5><br>
+        <p class="p fw-medium">A punctual forecast refers to a prediction or estimation of the staffing requirements at specific intervals or time points throughout the day. It is a forecast that takes into account the anticipated call volume and the corresponding number of agents needed to handle those calls at specific time intervals.</p>
+        <p class="p fw-medium">A punctual forecast typically involves breaking down the day into smaller time intervals, such as 15-minute or 30-minute intervals, and predicting the expected call volume and required staffing for each interval. This forecast helps call center managers effectively schedule and allocate resources to meet customer demand at different times of the day.</p>
+        <p class="p fw-medium"> By providing a granular breakdown of staffing needs, a punctual forecast enables call centers to optimize agent scheduling, reduce wait times, improve service levels, and enhance overall customer satisfaction. It helps ensure that the right number of agents are available during peak periods, preventing understaffing or overstaffing situations that can negatively impact service quality and operational costs.</p>
+      </div>
+
+      <div id="reverse-article" class="reverse_article">
+        <h4 class="fs-2">Want to calculate the workload you can handle?</h4><br>
+        <h5 class="fs-4"> <a href="{% url 'punctual_reverse' %}">Check Punctual Reverse Forecast!</a></h5><br>
+        <p class="p fw-medium">The reverse of a punctual forecast would be a backward or retroactive analysis of the staffing requirements and call volumes after the fact. Instead of predicting future staffing needs based on historical data and trends, the reverse approach involves analyzing historical data and actual call volumes to understand the staffing levels that were required in the past.</p>
+        <p class="p fw-medium">In a reverse analysis, call center managers or workforce optimization teams examine the actual call volumes and the corresponding staffing levels during specific time intervals. They compare this data against the forecasted or planned staffing levels to identify any discrepancies or variations. This analysis helps them understand if the call center was overstaffed or understaffed at certain times and evaluate the effectiveness of their workforce planning.</p>
+        <p class="p fw-medium">By conducting a reverse analysis, call centers can identify patterns, trends, or factors that might have contributed to the discrepancies between forecasted and actual staffing needs. This information can then be used to refine future forecasting models, improve scheduling practices, and enhance overall workforce optimization efforts.</p>
+        <p class="p fw-medium">The reverse analysis of call center staffing can provide valuable insights into historical performance, highlight areas for improvement, and inform future decision-making to ensure more accurate and efficient staffing plans.</p>
+      </div>
+
+      <div id="multiple-article" class="multiple_article">
+        <h4 class="fs-2">Want to calculate how many agents you need for different languages and channels in more than one hour?</h4><br>
+        <h5 class="fs-4"> <a href="{% url 'multiple_period' %}"> Check Multi-Objective Forecast!</a></h5><br>
+        <p class="p fw-medium">The combination of multiple periods, multiple languages, and multiple channels forecast can be called as multi-objective forecast. It refers to the process of predicting and planning for customer interactions across different time periods, languages, and communication channels in a contact center or customer service environment.</p>
+        <p class="p fw-medium">Multiple periods: This aspect involves forecasting customer demand and contact volumes over different time periods, such as hourly, daily, weekly, monthly, or seasonal intervals. It helps contact centers anticipate when they can expect high or low call volumes, enabling them to allocate resources effectively and ensure optimal staffing levels at various times.</p>
+        <p class="p fw-medium">Multiple languages: Many contact centers handle customer interactions in multiple languages to cater to diverse customer bases. In this context, forecasting for multiple languages involves predicting the volume and distribution of customer contacts in different languages. It helps contact centers allocate agents proficient in specific languages and ensure appropriate staffing levels to deliver efficient service across language requirements.</p>
+        <p class="p fw-medium">Multiple channels: In today's omnichannel customer service landscape, customers engage with businesses through various communication channels, including phone calls, emails, live chats, social media, and more. Forecasting for multiple channels involves predicting the volume and distribution of customer interactions across these channels. It helps contact centers plan agent resources, technology infrastructure, and workflows to handle customer contacts efficiently and consistently across different channels.</p>
+        <p class="p fw-medium">Combining these three elements—multiple periods, multiple languages, and multiple channels—enables contact centers to create comprehensive and accurate forecasts that reflect the complexity and diversity of customer interactions. This integrated forecasting approach helps optimize resource planning, agent scheduling, and overall workforce management to ensure excellent customer service experiences across different time frames, languages, and communication channels.</p>
+      </div>
+    </div>
+
+    <div class="side_buttons">
+      <button type="button" class="punctual_button btn btn-lg btn-outline-info" onclick="showArticle('punctual-article')">Read about Punctual Forecast</button><br><br><br>
+      <button type="button" class="reverse_button btn btn-lg btn-outline-info" onclick="showArticle('reverse-article')">Read about Punctual Reverse Forecast</button><br><br><br>
+      <button type="button" class="multiple_button btn btn-lg btn-outline-info" onclick="showArticle('multiple-article')">Read about Multi-Objective Forecast</button><br><br><br>
+
+
+    </div>
+  </div>
 {% endblock %}

@@ -1,54 +1,55 @@
-<div class="ponctual_reverse">
-  <div class="forecast_name">
-      <h3>Ponctual Reverse Forecast</h3><br>
-      <h6>Calculate the number of calls with the current service level</h6><br>
-      <h6>Download the input file, fill in with parameters and upload the file again</h6> <br>
-  </div>
+{% extends 'wfm/base.html' %}
+{% block content %}
+    <div class="ponctual_reverse_calculator">
+      <div class="forecast_name">
+          <h3>Ponctual Reverse Forecast</h3><br>
+          <h6>Calculate the number of calls with the current service level</h6><br>
+          <h6>Download the input file, fill in with parameters and upload the file again</h6> <br>
+      </div>
 
-  <button class="btn btn-primary" onclick="window.location='/download_template?type=punctual_reverse_forecast';">Download input file template</button> <br><br>
+      <button class="btn btn-primary" onclick="window.location='/download_template?type=punctual_reverse_forecast';">Download input file template</button> <br><br>
 
-  <form class="process_input_file" action="{% url 'process_ponctual_reverse' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="file" name="input_file" required>
-    <button type="submit" class="btn btn-primary">Calculate</button>
-  </form> <br><br>
+      <form class="process_input_file" action="{% url 'process_ponctual_reverse' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="input_file" required>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+      </form> <br><br>
 
 
-  <div class="ponctual_reverse_form">
-    <form class="ponctual_reverse" action="{% url 'process_ponctual_reverse' %}" method="post">
-      {% csrf_token %}
+      <div class="ponctual_reverse_form">
+        <form class="ponctual_reverse" action="{% url 'process_ponctual_reverse' %}" method="post">
+          {% csrf_token %}
 
-      <div class="for_margin"><label for="number">Number of working agents:</label></div>
-      <input class="left_margin" type="number" id="agents_num" name="agents_num" value="8" required min="1"><br><br>
+          <div class="for_margin"><label for="number">Number of working agents:</label></div>
+          <input class="left_margin" type="number" id="agents_num" name="agents_num" value="8" required min="1"><br><br>
 
-      <div class="for_margin"><label for="number">Average Handling Time:</label></div>
-      <input class="left_margin" type="number" id="aht_num" name="aht" value="1" required min="1">
+          <div class="for_margin"><label for="number">Average Handling Time:</label></div>
+          <input class="left_margin" type="number" id="aht_num" name="aht" value="1" required min="1">
 
-      <select class="period_type" id="periodTypeDropdown" name="aht_unit">
-        <option value="seconds">Seconds</option>
-        <option value="minutes" selected>Minutes</option>
-      </select> <br><br>
+          <select class="period_type" id="periodTypeDropdown" name="aht_unit">
+            <option value="seconds">Seconds</option>
+            <option value="minutes" selected>Minutes</option>
+          </select> <br><br>
 
-      <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
-      <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10" required min="1">
+          <div class="for_margin"><label for="waiting_time">Target maximum waiting time:</label></div>
+          <input class="left_margin" type="number" id="waiting_time" name="max_waiting_time" value="10" required min="1">
 
-      <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
-        <option value="seconds">Seconds</option>
-        <option value="minutes" selected>Minutes</option>
-      </select> <br><br>
+          <select class="period_type" id="periodTypeDropdown" name="max_waiting_time_unit">
+            <option value="seconds">Seconds</option>
+            <option value="minutes" selected>Minutes</option>
+          </select> <br><br>
 
-      <div class="for_margin"><label for="service_level">Desired service level:</label></div>
-      <input class="left_margin" type="number" id="service_level" name="service_level" value="100" required min="1">
-      <label for="service_level">in percentage</label><br><br>
+          <div class="for_margin"><label for="service_level">Desired service level:</label></div>
+          <input class="left_margin" type="number" id="service_level" name="service_level" value="100" required min="1">
+          <label for="service_level">in percentage</label><br><br>
 
-      <div class="for_margin"><label for="occupancy">Desired maximum occupancy:</label></div>
-      <input class="left_margin" type="number" id="occupancy" name="occupancy" value="80" placeholder="Leave 100 for raw" required min="1">
-      <label for="occupancy">in percentage</label><br><br>
+          <div class="for_margin"><label for="occupancy">Desired maximum occupancy:</label></div>
+          <input class="left_margin" type="number" id="occupancy" name="occupancy" value="80" placeholder="Leave 100 for raw" required min="1">
+          <label for="occupancy">in percentage</label><br><br>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
-      <button type="submit" class="btn btn-primary">View search</button>
-      <button type="submit" class="btn btn-primary">Export to Excel</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
 
-    </form>
-  </div>
-</div>
+        </form>
+      </div>
+    </div>
+{% endblock %}

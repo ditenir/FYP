@@ -7,7 +7,9 @@
   <p> Applying the maximum occupancy the maximum number of calls is  {{ punctual_reverse.max_calls_with_occupancy }}</p> <br>
   <p> Average occupancy is {{ punctual_reverse.average_occupancy }} %</p>  <br>
   <p> The service level is {{ punctual_reverse.service_level }} % </p> <br>
+
+  <button class="btn btn-primary" onclick="window.location='/calculations/{{ punctual_reverse.id }}/export';">Export in Excel</button> <br><br>
 </div>
 
-<button class="btn btn-primary" onclick="window.location='/calculations/{{ punctual_reverse.id }}/export';">Export in Excel</button> <br><br>
+
 {% endblock %}

@@ -10,3 +10,12 @@ function checkPasswords() {
 
     return true;
 }
+
+
+function showArticle(articleId) {
+  // Hide all article divs
+  $('.articles_content .articles > div').hide();
+
+  // Show the selected article div
+  $('#' + articleId).show();
+}
