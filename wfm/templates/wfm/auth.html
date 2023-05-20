@@ -5,12 +5,15 @@
       <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
       <link rel="stylesheet" href="{% static 'css/font_awesome.css' %}">
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
-      <meta charset="UTF-8">
+      <meta charset="UTF-8"
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">>
       <title>Welcome!</title>
   </head>
   <body>
     {% if message %}
-    <p>{{ message }}</p>
+      <div class="alert alert-light" role="alert">
+        {{ message }}
+      </div>
     {% endif %}
     <div class="signup">
       <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
