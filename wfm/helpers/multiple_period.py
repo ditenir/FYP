@@ -64,9 +64,6 @@ def generate_excel(calculation):
 
 def fill_export_with_table(row, table, worksheet):
     worksheet[f'B{row}'] = table.language
-    worksheet[f'B{row}'].fill = PatternFill(
-        patternType=""
-    )
     worksheet[f'C{row}'] = table.zone
     worksheet[f'D{row}'] = table.media_type
     for column, weekday in enumerate(WEEKDAYS):
